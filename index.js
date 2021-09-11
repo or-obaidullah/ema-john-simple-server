@@ -7,14 +7,15 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-
-
-const MongoClient = require('mongodb').MongoClient;
+const { MongoClient } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.fi07c.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+
 client.connect(err => {
   const productsCollection = client.db("emaJohnStore").collection("products");
   const ordersCollection = client.db("emaJohnStore").collection("orders");
+  
   app.post('/addProduct', (req,res) => {
     const products = req.body;
     productsCollection.insertOne(products)
